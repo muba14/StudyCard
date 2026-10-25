@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>StudyCard Önizleme</title>
+<style>
+:root{--blue:#1E5EFF;--blue-dark:#1446D6;--deep:#0B2E8A;--mid:#6C9BFF;--soft:#D6E4FF;--light:#EAF1FF;--bg:#F5F8FF;--white:#fff;--dark:#0F1B3D;--tmid:#5B6B8C;--tlight:#94A3C0;--stroke:#E1EAFB}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Roboto,"Segoe UI",system-ui,sans-serif;background:linear-gradient(160deg,#eef3ff,#dde7ff);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:24px 16px;color:var(--dark)}
+.top{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:18px}
+.top button{border:0;background:#fff;color:var(--blue);font-weight:600;font-size:13px;font-family:inherit;padding:9px 14px;border-radius:20px;cursor:pointer;box-shadow:0 1px 3px #1e5eff22}
+.top button.on{background:var(--blue);color:#fff}
+.phone{width:360px;max-width:100%;height:740px;background:#0b1020;border-radius:44px;padding:10px;box-shadow:0 30px 60px #0b2e8a40;position:relative}
+.screen{width:100%;height:100%;background:var(--bg);border-radius:36px;overflow:hidden;position:relative}
+.status{position:absolute;top:0;left:0;right:0;height:30px;display:flex;justify-content:space-between;align-items:center;padding:0 22px;color:#fff;font-size:12px;font-weight:600;z-index:5}
+.view{position:absolute;inset:0;display:none;flex-direction:column}
+.view.on{display:flex}
+svg.i{width:20px;height:20px;fill:currentColor;flex:none}
+/* main */
+.hdr{background:linear-gradient(135deg,var(--blue),var(--blue-dark));border-radius:0 0 28px 28px;padding:44px 20px 22px;color:#fff}
+.hrow{display:flex;align-items:center}
+.hrow .t{flex:1}
+.greet{opacity:.75;font-size:14px}
+.brand{font-size:30px;font-weight:900;letter-spacing:-.5px}
+.due{background:#ffffff33;border-radius:16px;padding:8px 14px;text-align:center}
+.due b{font-size:22px;font-weight:900;display:block}.due span{font-size:11px;opacity:.75}
+.sum{opacity:.75;font-size:14px;margin-top:6px}
+.search{margin-top:16px;height:48px;background:#ffffff33;border-radius:16px;display:flex;align-items:center;padding:0 14px;gap:10px}
+.search input{flex:1;background:none;border:0;outline:0;color:#fff;font-size:15px;font-family:inherit}
+.search input::placeholder{color:#ffffffb3}
+.tabs{display:flex;gap:8px;padding:16px 16px 6px}
+.pill{height:36px;padding:0 16px;border-radius:18px;background:var(--light);color:var(--blue);font-weight:600;font-size:14px;border:0;cursor:pointer;font-family:inherit;white-space:nowrap}
+.pill.on{background:var(--blue);color:#fff}
+.list{flex:1;overflow-y:auto;padding:6px 16px 96px}
+.card{background:#fff;border:1px solid var(--stroke);border-radius:20px;padding:14px;display:flex;gap:12px;margin:6px 0 12px;cursor:pointer;transition:transform .1s}
+.card:active{transform:scale(.98)}
+.strip{width:4px;border-radius:3px;background:var(--blue);flex:none}
+.strip.off{visibility:hidden}
+.cbody{flex:1;min-width:0}
+.crow{display:flex;justify-content:space-between;align-items:center;gap:6px}
+.tag{background:var(--light);color:var(--blue);font-size:11px;font-weight:600;padding:3px 8px;border-radius:10px;white-space:nowrap}
+.badge{display:flex;align-items:center;gap:4px}
+.badge svg{width:12px;height:12px}
+.badge.solid{background:var(--blue);color:#fff}.badge.deep{background:var(--deep);color:#fff}
+.ctitle{font-size:17px;font-weight:600;margin-top:8px}
+.cprev{font-size:14px;color:var(--tmid);margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.35}
+.cmeta{font-size:12px;color:var(--tlight);margin-top:8px}
+.thumb{width:68px;height:68px;border-radius:14px;flex:none;align-self:center}
+.empty{text-align:center;color:var(--tmid);padding:60px 30px;font-size:14px}
+.empty b{display:block;color:var(--dark);font-size:18px;margin:14px 0 6px}
+.fab{position:absolute;right:22px;bottom:30px;width:62px;height:62px;border-radius:50%;background:var(--blue);border:0;color:#fff;box-shadow:0 8px 18px #1e5eff66;cursor:pointer;display:grid;place-items:center}
+.fab svg{width:30px;height:30px}
+/* sub headers */
+.bar{background:linear-gradient(135deg,var(--blue),var(--blue-dark));padding:34px 10px 0;min-height:94px;display:flex;align-items:center;color:#fff;gap:4px}
+.ib{width:44px;height:44px;border-radius:50%;border:0;background:none;color:#fff;display:grid;place-items:center;cursor:pointer}
+.ib:hover{background:#ffffff22}
+.bar h2{flex:1;font-size:20px;font-weight:600}
+.save{background:#fff;color:var(--blue);border:0;height:38px;padding:0 16px 0 12px;border-radius:18px;font-weight:600;font-size:15px;font-family:inherit;display:flex;align-items:center;gap:6px;cursor:pointer;margin-right:6px}
+.save svg{width:18px;height:18px}
+.scroll{flex:1;overflow-y:auto;padding:16px}
+.sec{background:#fff;border:1px solid var(--stroke);border-radius:20px;padding:16px;margin-bottom:14px}
+.st{display:flex;align-items:center;gap:8px;font-weight:600;font-size:16px;margin-bottom:12px}
+.st svg{color:var(--blue)}
+.lbl{font-size:13px;font-weight:600;color:var(--tmid);margin-bottom:6px}
+.fld{width:100%;background:var(--bg);border:1px solid var(--stroke);border-radius:14px;padding:12px 14px;font-size:15px;font-family:inherit;color:var(--dark);margin-bottom:14px;outline:0;resize:none}
+.fld:focus{background:#fff;border:1.5px solid var(--blue)}
+.btns{display:flex;gap:10px}
+.ob{flex:1;height:46px;border:1px solid var(--soft);background:#fff;color:var(--blue);border-radius:14px;font-weight:600;font-size:14px;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer}
+.imgs{display:flex;gap:10px;margin-top:12px;overflow-x:auto}
+.im{width:96px;height:96px;border-radius:14px;flex:none;position:relative}
+.im i{position:absolute;top:5px;right:5px;width:24px;height:24px;border-radius:50%;background:#0f1b3dcc;color:#fff;font-style:normal;font-size:13px;display:grid;place-items:center;cursor:pointer}
+.rowc{display:flex;gap:8px;margin-bottom:8px;align-items:center}
+.rowc .fld{margin:0;padding:10px 12px}
+.rowc .a{flex:2}.rowc .b{flex:1}
+.rowc span{color:var(--tlight);width:28px;text-align:center;cursor:pointer}
+.link{background:none;border:0;color:var(--blue);font-weight:600;font-size:14px;font-family:inherit;padding:10px 0;cursor:pointer}
+.revbox{background:var(--light);border-radius:10px;padding:14px;display:flex;align-items:center;gap:12px;color:var(--deep);font-weight:600;font-size:16px}
+.revbox svg{color:var(--blue);width:26px;height:26px}
+.quick{display:flex;gap:8px;overflow-x:auto;margin:12px 0}
+/* detail */
+.dtag{display:inline-block;background:var(--light);color:var(--blue);font-weight:600;font-size:12px;padding:4px 10px;border-radius:10px}
+.dtitle{font-size:26px;font-weight:900;margin:10px 0 16px;line-height:1.15}
+.rcard{background:linear-gradient(135deg,var(--blue),var(--deep));border-radius:20px;padding:18px;display:flex;gap:14px;align-items:center;color:#fff;margin-bottom:14px;cursor:pointer;box-shadow:0 6px 16px #1e5eff40}
+.rcard .bell{width:46px;height:46px;border-radius:16px;background:#ffffff33;display:grid;place-items:center}
+.rcard small{opacity:.75;font-size:12px}.rcard b{display:block;font-size:17px;margin:2px 0 4px}
+.dtext{font-size:16px;line-height:1.6;white-space:pre-line}
+.dimg{width:100%;height:170px;border-radius:14px;margin-bottom:10px}
+.bottom{background:#fff;border-top:1px solid var(--stroke);padding:12px 16px 22px}
+.primary{width:100%;height:54px;border:0;border-radius:16px;background:var(--blue);color:#fff;font-weight:600;font-size:17px;font-family:inherit;cursor:pointer}
+/* dialog */
+.scrim{position:absolute;inset:0;background:#0b1020aa;display:none;align-items:center;justify-content:center;z-index:20;padding:16px}
+.scrim.on{display:flex}
+.dlg{background:#fff;border-radius:24px;padding:22px 8px 10px;width:100%}
+.dlg h3{font-size:18px;padding:0 16px 10px}
+.dlg button.o{display:block;width:100%;text-align:left;border:0;background:none;padding:13px 16px;font-size:15px;font-family:inherit;color:var(--dark);border-radius:12px;cursor:pointer}
+.dlg button.o:hover{background:var(--light)}
+.dlg button.o.star{color:var(--blue);font-weight:600}
+.dlg .act{text-align:right;padding:6px 10px 0}
+.dlg .act button{border:0;background:none;color:var(--blue);font-weight:600;font-size:14px;font-family:inherit;padding:10px;cursor:pointer}
+/* notification */
+.notif{position:absolute;left:8px;right:8px;top:-140px;background:#fff;border-radius:22px;padding:14px;z-index:30;box-shadow:0 10px 30px #0b102055;transition:top .4s;cursor:pointer}
+.notif.on{top:36px}
+.nh{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--tmid)}
+.nh .ic{width:18px;height:18px;border-radius:50%;background:var(--blue);color:#fff;display:grid;place-items:center}
+.nh .ic svg{width:12px;height:12px}
+.nt{font-weight:600;font-size:14px;margin-top:8px}
+.nb{font-size:13px;color:var(--tmid);margin-top:2px}
+.na{display:flex;gap:18px;margin-top:10px;font-size:13px;font-weight:600;color:var(--blue)}
+.toast{position:absolute;left:50%;bottom:100px;transform:translateX(-50%);background:#323232;color:#fff;font-size:13px;padding:10px 16px;border-radius:20px;opacity:0;transition:opacity .3s;z-index:40;white-space:nowrap;pointer-events:none}
+.toast.on{opacity:.95}
+.hint{font-size:13px;color:var(--tmid);margin-top:14px;text-align:center;max-width:360px}
+</style>
+</head>
+<body>
+<div class="top">
+  <button data-go="main" class="on">Ana ekran</button>
+  <button data-go="edit">Not ekle</button>
+  <button data-go="detail">Not detayı</button>
+  <button id="btnNotif">🔔 Bildirimi göster</button>
+</div>
+
+<div class="phone"><div class="screen" id="screen">
+  <div class="status"><span id="clock">14:37</span><span>▂▄▆ 🔋</span></div>
+
+  <!-- MAIN -->
+  <div class="view on" id="v-main">
+    <div class="hdr">
+      <div class="hrow"><div class="t"><div class="greet">İyi günler 👋</div><div class="brand">StudyCard</div></div>
+        <div class="due"><b id="dueCount">0</b><span>bugün</span></div></div>
+      <div class="sum" id="summary"></div>
+      <div class="search"><svg class="i" viewBox="0 0 24 24"><path d="M15.5,14h-0.79l-0.28,-0.27C15.41,12.59 16,11.11 16,9.5 16,5.91 13.09,3 9.5,3S3,5.91 3,9.5 5.91,16 9.5,16c1.61,0 3.09,-0.59 4.23,-1.57l0.27,0.28v0.79l5,4.99L20.49,19l-4.99,-5zM9.5,14C7.01,14 5,11.99 5,9.5S7.01,5 9.5,5 14,7.01 14,9.5 11.99,14 9.5,14z"/></svg><input id="q" placeholder="Not veya ders ara…"></div>
+    </div>
+    <div class="tabs"><button class="pill" data-tab="0">Bugün</button><button class="pill" data-tab="1">Yaklaşan</button><button class="pill" data-tab="2">Tümü</button></div>
+    <div class="list" id="list"></div>
+    <button class="fab" data-go="edit" aria-label="Yeni not"><svg class="i" viewBox="0 0 24 24"><path d="M19,13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg></button>
+  </div>
+
+  <!-- EDIT -->
+  <div class="view" id="v-edit">
+    <div class="bar"><button class="ib" data-go="main"><svg class="i" viewBox="0 0 24 24"><path d="M20,11H7.83l5.59,-5.59L12,4l-8,8 8,8 1.41,-1.41L7.83,13H20v-2z"/></svg></button><h2>Yeni Not</h2>
+      <button class="save" id="saveBtn"><svg class="i" viewBox="0 0 24 24"><path d="M9,16.17L4.83,12l-1.42,1.41L9,19 21,7l-1.41,-1.41z"/></svg>Kaydet</button></div>
+    <div class="scroll">
+      <div class="sec"><div class="st"><svg class="i" viewBox="0 0 24 24"><path d="M14,2H6c-1.1,0 -1.99,0.9 -1.99,2L4,20c0,1.1 0.89,2 1.99,2H18c1.1,0 2,-0.9 2,-2V8l-6,-6zM16,18H8v-2h8v2zM16,14H8v-2h8v2zM13,9V3.5L18.5,9H13z"/></svg>Not bilgileri</div>
+        <div class="lbl">Ders</div><input class="fld" id="eSub" value="Fizik">
+        <div class="lbl">Başlık</div><input class="fld" id="eTitle" value="Newton'un hareket yasaları">
+        <div class="lbl">Not</div><textarea class="fld" id="eBody" rows="5" style="margin:0">1. Eylemsizlik: Net kuvvet sıfırsa cisim durumunu korur.
+2. F = m · a
+3. Etki = tepki</textarea></div>
+      <div class="sec"><div class="st"><svg class="i" viewBox="0 0 24 24"><path d="M21,19V5c0,-1.1 -0.9,-2 -2,-2H5c-1.1,0 -2,0.9 -2,2v14c0,1.1 0.9,2 2,2h14c1.1,0 2,-0.9 2,-2zM8.5,13.5l2.5,3.01L14.5,12l4.5,6H5l3.5,-4.5z"/></svg>Görseller</div>
+        <div class="btns"><button class="ob" id="addImg">🖼 Galeri</button><button class="ob" id="addImg2">📷 Kamera</button></div>
+        <div class="imgs" id="eImgs"></div></div>
+      <div class="sec"><div class="st"><svg class="i" viewBox="0 0 24 24"><path d="M5,9.2h3V19H5zM10.6,5h2.8v14h-2.8zM16.2,13H19v6h-2.8z"/></svg>Grafik</div>
+        <input class="fld" value="Kuvvet – ivme ölçümleri" placeholder="Grafik başlığı">
+        <div style="display:flex;gap:8px;margin-bottom:12px"><button class="pill on" data-ct="bar">Çubuk</button><button class="pill" data-ct="line">Çizgi</button><button class="pill" data-ct="pie">Pasta</button></div>
+        <div id="rows"></div>
+        <button class="link" id="addRow">+ Satır ekle</button>
+        <svg id="ePrev" viewBox="0 0 300 200" style="width:100%;height:200px"></svg></div>
+      <div class="sec"><div class="st"><svg class="i" viewBox="0 0 24 24"><path d="M12,22c1.1,0 2,-0.9 2,-2h-4c0,1.1 0.89,2 2,2zM18,16v-5c0,-3.07 -1.64,-5.64 -4.5,-6.32V4c0,-0.83 -0.67,-1.5 -1.5,-1.5s-1.5,0.67 -1.5,1.5v0.68C7.63,5.36 6,7.92 6,11v5l-2,2v1h16v-1l-2,-2z"/></svg>Tekrar hatırlatıcısı</div>
+        <div class="revbox"><svg class="i" viewBox="0 0 24 24"><path d="M22,5.72l-4.6,-3.86 -1.29,1.53 4.6,3.86L22,5.72zM7.88,3.39L6.6,1.86 2,5.71l1.29,1.53 4.59,-3.85zM12.5,8H11v6l4.75,2.85 0.75,-1.23 -4,-2.37V8zM12,4c-4.97,0 -9,4.03 -9,9s4.02,9 9,9c4.97,0 9,-4.03 9,-9s-4.03,-9 -9,-9zM12,20c-3.87,0 -7,-3.13 -7,-7s3.13,-7 7,-7 7,3.13 7,7 -3.13,7 -7,7z"/></svg><span id="revText">Tarih seçilmedi</span></div>
+        <div class="quick" id="quick"></div>
+        <div class="btns"><button class="ob">📅 Tarih seç</button><button class="ob">⏰ Saat seç</button></div></div>
+    </div>
+  </div>
+
+  <!-- DETAIL -->
+  <div class="view" id="v-detail">
+    <div class="bar"><button class="ib" data-go="main"><svg class="i" viewBox="0 0 24 24"><path d="M20,11H7.83l5.59,-5.59L12,4l-8,8 8,8 1.41,-1.41L7.83,13H20v-2z"/></svg></button><h2>Not</h2>
+      <button class="ib" data-go="edit"><svg class="i" viewBox="0 0 24 24"><path d="M3,17.25V21h3.75L17.81,9.94l-3.75,-3.75L3,17.25zM20.71,7.04c0.39,-0.39 0.39,-1.02 0,-1.41l-2.34,-2.34c-0.39,-0.39 -1.02,-0.39 -1.41,0l-1.83,1.83 3.75,3.75 1.83,-1.83z"/></svg></button>
+      <button class="ib" id="delBtn"><svg class="i" viewBox="0 0 24 24"><path d="M6,19c0,1.1 0.9,2 2,2h8c1.1,0 2,-0.9 2,-2V7H6v12zM19,4h-3.5l-1,-1h-5l-1,1H5v2h14V4z"/></svg></button></div>
+    <div class="scroll" id="dScroll"></div>
+    <div class="bottom"><button class="primary" id="reviewedBtn">✓  Tekrar ettim</button></div>
+  </div>
+
+  <div class="scrim" id="scrim"><div class="dlg" id="dlg"></div></div>
+  <div class="notif" id="notif">
+    <div class="nh"><span class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M12,22c1.1,0 2,-0.9 2,-2h-4c0,1.1 0.89,2 2,2zM18,16v-5c0,-3.07 -1.64,-5.64 -4.5,-6.32V4c0,-0.83 -0.67,-1.5 -1.5,-1.5s-1.5,0.67 -1.5,1.5v0.68C7.63,5.36 6,7.92 6,11v5l-2,2v1h16v-1l-2,-2z"/></svg></span>StudyCard · <span id="nSub"></span> · şimdi</div>
+    <div class="nt" id="nTitle"></div><div class="nb" id="nBody"></div>
+    <div class="na"><span id="nSnooze">YARIN HATIRLAT</span><span>NOTU AÇ</span></div>
+  </div>
+  <div class="toast" id="toast"></div>
+</div></div>
+<p class="hint">Butonlara ve kartlara tıklayabilirsin: sekmeler, arama, not detayı, “Tekrar ettim” ve bildirim çalışıyor. Bu, Android uygulamasının görünümünün tarayıcıdaki önizlemesidir.</p>
+
+<script>
+const DAY=864e5, now=new Date();
+const at=(d,h,m)=>{const t=new Date(now);t.setDate(t.getDate()+d);t.setHours(h,m||0,0,0);return t.getTime()};
+const G=[['#6C9BFF','#1E5EFF'],['#A9C4FF','#1446D6'],['#D6E4FF','#6C9BFF'],['#8AB0FF','#0B2E8A']];
+const img=i=>`linear-gradient(135deg,${G[i%4][0]},${G[i%4][1]})`;
+let notes=[
+ {id:1,sub:'Fizik',title:"Newton'un hareket yasaları",body:"1. Eylemsizlik: Net kuvvet sıfırsa cisim durumunu korur.\n2. F = m · a — kuvvet, kütle ile ivmenin çarpımıdır.\n3. Etki = tepki: her kuvvete eşit ve zıt yönlü bir kuvvet karşılık gelir.",imgs:[0,1],chart:{type:'bar',title:'Kuvvet – ivme ölçümleri',data:[['1 N',2],['2 N',4.1],['3 N',5.9],['4 N',8.2]]},rev:at(0,8,30),cnt:2},
+ {id:2,sub:'C Programlama',title:'Pointer ve diziler',body:"int *p = arr; ifadesinde p dizinin ilk elemanını gösterir. *(p+i) ile arr[i] aynıdır.",imgs:[2],chart:null,rev:at(0,18,30),cnt:0},
+ {id:3,sub:'İnkılap Tarihi',title:'Lozan Antlaşması maddeleri',body:"24 Temmuz 1923. Kapitülasyonlar kaldırıldı, sınırlar büyük ölçüde belirlendi.",imgs:[],chart:{type:'pie',title:'Konu dağılımı',data:[['Sınırlar',40],['Ekonomi',25],['Azınlıklar',20],['Boğazlar',15]]},rev:at(-2,9),cnt:3},
+ {id:4,sub:'Matematik',title:'Türev kuralları',body:"(xⁿ)' = n·xⁿ⁻¹ · Çarpım: (fg)' = f'g + fg' · Zincir kuralı: f(g(x))' = f'(g(x))·g'(x)",imgs:[3],chart:{type:'line',title:'f(x) = x² değerleri',data:[['0',0],['1',1],['2',4],['3',9],['4',16]]},rev:at(1,9),cnt:1},
+ {id:5,sub:'Devre Temelleri',title:'Kirchhoff yasaları',body:"KCL: Bir düğüme giren akımların toplamı çıkanlara eşittir. KVL: Kapalı çevrede gerilimlerin toplamı sıfırdır.",imgs:[],chart:null,rev:at(4,10),cnt:0},
+ {id:6,sub:'İngilizce',title:'Phrasal verbs – 1. liste',body:"look up, give up, run out of, put off, come across",imgs:[],chart:null,rev:0,cnt:0}];
+let tab=-1,cur=1,ctype='bar',eImgs=[0],erev=0;
+const $=s=>document.querySelector(s);
+const sod=t=>{const d=new Date(t);d.setHours(0,0,0,0);return d.getTime()};
+const eot=sod(now)+DAY-1;
+const hm=t=>new Date(t).toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
+const dd=t=>Math.round((sod(t)-sod(now))/DAY);
+function badge(t){const d=dd(t);if(d<0)return'Gecikti · '+(-d)+' gün';if(d==0)return t<=Date.now()?'Şimdi tekrar et':'Bugün '+hm(t);if(d==1)return'Yarın '+hm(t);if(d<7)return d+' gün sonra';return new Date(t).toLocaleDateString('tr-TR',{day:'numeric',month:'short'})}
+function friendly(t){const d=dd(t);if(d==0)return'Bugün · '+hm(t);if(d==1)return'Yarın · '+hm(t);if(d==-1)return'Dün · '+hm(t);if(d>1&&d<7)return new Date(t).toLocaleDateString('tr-TR',{weekday:'long'})+' · '+hm(t);return new Date(t).toLocaleDateString('tr-TR',{day:'numeric',month:'long'})+' · '+hm(t)}
+function full(t){return new Date(t).toLocaleDateString('tr-TR',{day:'numeric',month:'long',weekday:'long'})+' · '+hm(t)}
+const bellS='<svg class="i" viewBox="0 0 24 24"><path d="M12,22c1.1,0 2,-0.9 2,-2h-4c0,1.1 0.89,2 2,2zM18,16v-5c0,-3.07 -1.64,-5.64 -4.5,-6.32V4c0,-0.83 -0.67,-1.5 -1.5,-1.5s-1.5,0.67 -1.5,1.5v0.68C7.63,5.36 6,7.92 6,11v5l-2,2v1h16v-1l-2,-2z"/></svg>';
+function toast(s){const t=$('#toast');t.textContent=s;t.classList.add('on');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('on'),2200)}
+function go(v){document.querySelectorAll('.view').forEach(e=>e.classList.toggle('on',e.id=='v-'+v));document.querySelectorAll('.top [data-go]').forEach(b=>b.classList.toggle('on',b.dataset.go==v));if(v=='main')renderMain();if(v=='detail')renderDetail();$('#screen').querySelectorAll('.scroll').forEach(s=>s.scrollTop=0)}
+document.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g)go(g.dataset.go)});
+
+function renderMain(){
+ const due=notes.filter(n=>n.rev&&n.rev<=eot).length, up=notes.filter(n=>n.rev>eot).length;
+ $('#dueCount').textContent=due;
+ $('#summary').textContent=due?due+' notun bugün tekrar edilmeyi bekliyor.':up?'Bugün için tekrar yok · '+up+' yaklaşan tekrar var.':notes.length+' ders notun var.';
+ if(tab<0)tab=due?0:2;
+ const lbl=['Bugün','Yaklaşan','Tümü'],cnt=[due,up,notes.length];
+ document.querySelectorAll('[data-tab]').forEach(b=>{const i=+b.dataset.tab;b.classList.toggle('on',i==tab);b.textContent=lbl[i]+(cnt[i]?'  '+cnt[i]:'')});
+ const q=$('#q').value.trim().toLocaleLowerCase('tr');
+ let out=notes.filter(n=>(tab!=0||(n.rev&&n.rev<=eot))&&(tab!=1||n.rev>eot)&&(!q||(n.title+' '+n.sub+' '+n.body).toLocaleLowerCase('tr').includes(q)));
+ if(tab<2)out.sort((a,b)=>a.rev-b.rev);
+ if(!out.length){$('#list').innerHTML=`<div class="empty"><svg viewBox="0 0 108 108" width="120" height="120"><circle cx="54" cy="54" r="50" fill="#EAF1FF"/><rect x="34" y="36" width="42" height="46" rx="6" fill="#fff"/><rect x="41" y="47" width="24" height="4" rx="2" fill="#1E5EFF"/><rect x="41" y="56" width="30" height="4" rx="2" fill="#1E5EFF" opacity=".5"/><rect x="41" y="65" width="24" height="4" rx="2" fill="#1E5EFF" opacity=".5"/><circle cx="70" cy="39" r="10" fill="#1E5EFF"/></svg><b>${q?'Sonuç bulunamadı':tab==0?'Bugün tekrar yok':'Yaklaşan tekrar yok'}</b>${q?`"${q}" ile eşleşen not yok.`:'Yaklaşan sekmesinden sıradakilere bakabilirsin.'}</div>`;return}
+ $('#list').innerHTML=out.map(n=>{const isDue=n.rev&&n.rev<=eot,over=n.rev&&dd(n.rev)<0;
+  const meta=[n.imgs.length?'▣ '+n.imgs.length+' görsel':'',n.chart?'▤ grafik':'',n.cnt?'↻ '+n.cnt+' kez tekrar':''].filter(Boolean).join('   ');
+  return `<div class="card" data-id="${n.id}"><div class="strip ${isDue?'':'off'}"></div><div class="cbody"><div class="crow"><span class="tag">${n.sub}</span>${n.rev?`<span class="tag badge ${over?'deep':isDue?'solid':''}">${bellS}${badge(n.rev)}</span>`:''}</div><div class="ctitle">${n.title}</div><div class="cprev">${n.body}</div>${meta?`<div class="cmeta">${meta}</div>`:''}</div>${n.imgs.length?`<div class="thumb" style="background:${img(n.imgs[0])}"></div>`:''}</div>`}).join('');
+}
+$('#list').addEventListener('click',e=>{const c=e.target.closest('.card');if(c){cur=+c.dataset.id;go('detail')}});
+document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{tab=+b.dataset.tab;renderMain()});
+$('#q').oninput=renderMain;
+
+// Grafik çizimi (uygulamadaki ChartView ile aynı mantık)
+function chartSVG(type,data,W=300,H=200){
+ data=data.filter(d=>!isNaN(d[1]));
+ if(!data.length)return`<text x="${W/2}" y="${H/2}" text-anchor="middle" fill="#5B6B8C" font-size="11">Grafik için etiket ve değer gir</text>`;
+ const pal=['#1E5EFF','#0B2E8A','#6C9BFF','#1446D6','#A9C4FF','#3D7BFF'];
+ let s='<defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1E5EFF"/><stop offset="1" stop-color="#6C9BFF"/></linearGradient><linearGradient id="ag" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1E5EFF" stop-opacity=".33"/><stop offset="1" stop-color="#1E5EFF" stop-opacity=".02"/></linearGradient></defs>';
+ if(type=='pie'){const tot=data.reduce((a,d)=>a+Math.max(0,d[1]),0);if(!tot)return s;const r=Math.min(H-16,W*.48)/2,cx=8+r,cy=H/2;let a=-Math.PI/2;
+  data.forEach((d,i)=>{if(d[1]<=0)return;const sw=d[1]/tot*2*Math.PI,x1=cx+r*Math.cos(a),y1=cy+r*Math.sin(a),x2=cx+r*Math.cos(a+sw),y2=cy+r*Math.sin(a+sw);s+=`<path d="M${cx},${cy}L${x1},${y1}A${r},${r} 0 ${sw>Math.PI?1:0} 1 ${x2},${y2}Z" fill="${pal[i%6]}"/>`;a+=sw});
+  s+=`<circle cx="${cx}" cy="${cy}" r="${r*.6}" fill="#fff"/><text x="${cx}" y="${cy+5}" text-anchor="middle" font-weight="700" font-size="14" fill="#0F1B3D">${tot}</text>`;
+  const lx=cx+r+18;let ly=cy-data.length*10+10;data.forEach((d,i)=>{s+=`<rect x="${lx}" y="${ly-5}" width="10" height="10" rx="3" fill="${pal[i%6]}"/><text x="${lx+16}" y="${ly+4}" font-size="11" fill="#5B6B8C">${d[0]} %${Math.round(d[1]/tot*100)}</text>`;ly+=20});return s}
+ const L=34,R=W-8,T=18,B=H-26;let mx=Math.max(0,...data.map(d=>d[1])),mn=Math.min(0,...data.map(d=>d[1]));if(mx==mn)mx=mn+1;const rg=mx-mn;
+ for(let i=0;i<=4;i++){const y=B-(B-T)*i/4;s+=`<line x1="${L}" x2="${R}" y1="${y}" y2="${y}" stroke="#E6EDFB"/><text x="${L-6}" y="${y+4}" text-anchor="end" font-size="10" fill="#5B6B8C">${+(mn+rg*i/4).toFixed(1)}</text>`}
+ const n=data.length,sl=(R-L)/n,zy=B-(0-mn)/rg*(B-T),xs=data.map((d,i)=>L+sl*i+sl/2),ys=data.map(d=>B-(d[1]-mn)/rg*(B-T));
+ data.forEach((d,i)=>s+=`<text x="${xs[i]}" y="${B+16}" text-anchor="middle" font-size="10" fill="#5B6B8C">${d[0]}</text>`);
+ if(type=='bar'){const bw=Math.min(sl*.58,44);data.forEach((d,i)=>{const t=Math.min(ys[i],zy),b=Math.max(ys[i],zy);s+=`<rect x="${xs[i]-bw/2}" y="${t}" width="${bw}" height="${Math.max(2,b-t)}" rx="7" fill="url(#bg)"/><text x="${xs[i]}" y="${t-5}" text-anchor="middle" font-size="11" font-weight="700" fill="#0F1B3D">${d[1]}</text>`})}
+ else{s+=`<path d="M${xs[0]},${zy}${xs.map((x,i)=>'L'+x+','+ys[i]).join('')}L${xs[n-1]},${zy}Z" fill="url(#ag)"/><path d="${xs.map((x,i)=>(i?'L':'M')+x+','+ys[i]).join('')}" fill="none" stroke="#1E5EFF" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>`;
+  data.forEach((d,i)=>s+=`<circle cx="${xs[i]}" cy="${ys[i]}" r="5" fill="#fff"/><circle cx="${xs[i]}" cy="${ys[i]}" r="3.2" fill="#1E5EFF"/><text x="${xs[i]}" y="${ys[i]-9}" text-anchor="middle" font-size="11" font-weight="700" fill="#0F1B3D">${d[1]}</text>`)}
+ return s}
+
+function renderDetail(){
+ const n=notes.find(x=>x.id==cur)||notes[0];cur=n.id;
+ const next=n.rev?friendly(n.rev)+(n.rev<=Date.now()?'  ·  zamanı geldi':''):'Planlanmadı';
+ $('#dScroll').innerHTML=`<span class="dtag">${n.sub}</span><div class="dtitle">${n.title}</div>
+ <div class="rcard" id="rcard"><div class="bell">${bellS}</div><div><small>Sonraki tekrar</small><b>${next}</b><small>${n.cnt?'Bu notu '+n.cnt+' kez tekrar ettin':'Henüz tekrar etmedin · dokunarak planla'}</small></div></div>
+ ${n.body?`<div class="sec"><div class="st">📝 Notlar</div><div class="dtext">${n.body}</div></div>`:''}
+ ${n.imgs.length?`<div class="sec"><div class="st">🖼 Görseller</div>${n.imgs.map(i=>`<div class="dimg" style="background:${img(i)}"></div>`).join('')}</div>`:''}
+ ${n.chart?`<div class="sec"><div class="st">📊 ${n.chart.title}</div><svg viewBox="0 0 300 220" style="width:100%;height:220px">${chartSVG(n.chart.type,n.chart.data,300,220)}</svg></div>`:''}`;
+ $('#rcard').onclick=openReviewDlg;
+}
+const label=d=>({1:'Yarın',7:'1 hafta sonra',14:'2 hafta sonra',30:'1 ay sonra',60:'2 ay sonra'})[d]||d+' gün sonra';
+function openReviewDlg(){
+ const n=notes.find(x=>x.id==cur),S=[1,3,7,14,30,60],sg=S[Math.min(n.cnt,5)],days=[sg,1,3,7,14,30];
+ const keep=t=>{const d=t?new Date(t):null;return [d?d.getHours():9,d?d.getMinutes():0]};
+ $('#dlg').innerHTML=`<h3>Harika! Sonraki tekrar ne zaman?</h3>`+days.map((d,i)=>`<button class="o ${i?'':'star'}" data-d="${d}">${i?label(d):'★  Önerilen: '+label(d)+'  (aralıklı tekrar)'}</button>`).join('')+`<button class="o" data-d="-1">Özel tarih seç…</button><button class="o" data-d="0">Bir daha hatırlatma</button><div class="act"><button id="dlgCancel">VAZGEÇ</button></div>`;
+ $('#scrim').classList.add('on');
+ $('#dlgCancel').onclick=()=>$('#scrim').classList.remove('on');
+ $('#dlg').querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>{let d=+b.dataset.d;if(d==-1)d=5;const [h,m]=keep(n.rev);
+  n.cnt++;n.rev=d?at(d,h,m):0;$('#scrim').classList.remove('on');renderDetail();toast(n.rev?'Sonraki tekrar: '+friendly(n.rev):'Tekrar kaydedildi')});
+}
+$('#reviewedBtn').onclick=openReviewDlg;
+$('#delBtn').onclick=()=>{$('#dlg').innerHTML=`<h3>Not silinsin mi?</h3><p style="padding:0 16px;color:#5B6B8C;font-size:14px">Bu not, görselleri ve hatırlatıcısı kalıcı olarak silinecek.</p><div class="act"><button id="c1">VAZGEÇ</button><button id="c2">SİL</button></div>`;$('#scrim').classList.add('on');$('#c1').onclick=()=>$('#scrim').classList.remove('on');$('#c2').onclick=()=>{notes=notes.filter(x=>x.id!=cur);$('#scrim').classList.remove('on');toast('Not silindi');go('main')}};
+$('#scrim').onclick=e=>{if(e.target.id=='scrim')$('#scrim').classList.remove('on')};
+
+// Düzenleme ekranı
+let rows=[['1 N','2'],['2 N','4.1'],['3 N','5.9']];
+function renderRows(){$('#rows').innerHTML=rows.map((r,i)=>`<div class="rowc"><input class="fld a" value="${r[0]}" data-i="${i}" data-k="0" placeholder="Etiket"><input class="fld b" value="${r[1]}" data-i="${i}" data-k="1" placeholder="Değer"><span data-x="${i}">✕</span></div>`).join('');drawPrev()}
+function drawPrev(){$('#ePrev').innerHTML=chartSVG(ctype,rows.filter(r=>r[0]||r[1]).map(r=>[r[0],parseFloat(String(r[1]).replace(',','.'))]))}
+$('#rows').addEventListener('input',e=>{const t=e.target;if(t.dataset.i){rows[t.dataset.i][t.dataset.k]=t.value;drawPrev()}});
+$('#rows').addEventListener('click',e=>{if(e.target.dataset.x){rows.splice(+e.target.dataset.x,1);renderRows()}});
+$('#addRow').onclick=()=>{rows.push(['','']);renderRows()};
+document.querySelectorAll('[data-ct]').forEach(b=>b.onclick=()=>{ctype=b.dataset.ct;document.querySelectorAll('[data-ct]').forEach(x=>x.classList.toggle('on',x==b));drawPrev()});
+function renderImgs(){$('#eImgs').innerHTML=eImgs.map((g,i)=>`<div class="im" style="background:${img(g)}"><i data-r="${i}">✕</i></div>`).join('')}
+$('#eImgs').onclick=e=>{if(e.target.dataset.r){eImgs.splice(+e.target.dataset.r,1);renderImgs()}};
+$('#addImg').onclick=$('#addImg2').onclick=()=>{eImgs.push(eImgs.length+1);renderImgs();toast('Görsel ekleniyor…')};
+$('#quick').innerHTML=[['Yarın',1],['3 gün',3],['1 hafta',7],['2 hafta',14],['1 ay',30]].map(q=>`<button class="pill" data-q="${q[1]}">${q[0]}</button>`).join('');
+$('#quick').onclick=e=>{const d=e.target.dataset.q;if(!d)return;const h=erev?new Date(erev).getHours():9,m=erev?new Date(erev).getMinutes():0;erev=at(+d,h,m);$('#revText').textContent=full(erev)};
+$('#saveBtn').onclick=()=>{const t=$('#eTitle').value.trim()||'Adsız not';const n={id:Date.now(),sub:$('#eSub').value.trim()||'Genel',title:t,body:$('#eBody').value.trim(),imgs:[...eImgs],chart:rows.length?{type:ctype,title:'Grafik',data:rows.filter(r=>r[0]||r[1]).map(r=>[r[0],parseFloat(String(r[1]).replace(',','.'))])}:null,rev:erev,cnt:0};notes.unshift(n);toast(erev?'Kaydedildi · Tekrar: '+friendly(erev):'Kaydedildi');tab=2;go('main')};
+
+// Bildirim
+$('#btnNotif').onclick=()=>{const n=notes.find(x=>x.rev&&x.rev<=eot)||notes[0];$('#nSub').textContent=n.sub;$('#nTitle').textContent='Tekrar zamanı: '+n.title;$('#nBody').textContent=n.sub+' · '+n.body.slice(0,70)+(n.body.length>70?'…':'');
+ const el=$('#notif');el.dataset.id=n.id;el.classList.add('on');clearTimeout(el._h);el._h=setTimeout(()=>el.classList.remove('on'),6000)};
+$('#notif').onclick=e=>{const el=$('#notif'),n=notes.find(x=>x.id==el.dataset.id);el.classList.remove('on');if(e.target.id=='nSnooze'){const d=new Date(n.rev||Date.now());n.rev=at(1,d.getHours(),d.getMinutes());toast('Yarın hatırlatılacak');renderMain();return}cur=n.id;go('detail')};
+
+$('#clock').textContent=hm(Date.now());
+renderRows();renderImgs();renderMain();
+</script>
+</body>
+</html>

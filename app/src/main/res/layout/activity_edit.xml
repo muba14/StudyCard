@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_header_flat"
+        android:gravity="center_vertical"
+        android:minHeight="60dp"
+        android:orientation="horizontal"
+        android:paddingStart="6dp"
+        android:paddingEnd="14dp">
+
+        <ImageView
+            android:id="@+id/btnBack"
+            style="@style/HeaderIcon"
+            android:contentDescription="Geri"
+            android:src="@drawable/ic_back" />
+
+        <TextView
+            android:id="@+id/tvHeader"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/new_note"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/btnSave"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:background="@drawable/bg_save"
+            android:drawableStart="@drawable/ic_check"
+            android:drawablePadding="6dp"
+            android:drawableTint="@color/blue"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:paddingStart="12dp"
+            android:paddingEnd="16dp"
+            android:text="@string/save"
+            android:textColor="@color/blue"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Not bilgileri -->
+            <LinearLayout style="@style/SectionCard">
+
+                <TextView
+                    style="@style/SectionTitle"
+                    android:drawableStart="@drawable/ic_notes"
+                    android:drawableTint="@color/blue"
+                    android:text="@string/section_info" />
+
+                <TextView
+                    style="@style/FieldLabel"
+                    android:text="@string/label_subject" />
+
+                <AutoCompleteTextView
+                    android:id="@+id/etSubject"
+                    style="@style/Field"
+                    android:completionThreshold="1"
+                    android:hint="@string/hint_subject"
+                    android:inputType="textCapSentences"
+                    android:maxLines="1" />
+
+                <TextView
+                    style="@style/FieldLabel"
+                    android:text="@string/label_title" />
+
+                <EditText
+                    android:id="@+id/etTitle"
+                    style="@style/Field"
+                    android:hint="@string/hint_title"
+                    android:inputType="textCapSentences"
+                    android:maxLines="2" />
+
+                <TextView
+                    style="@style/FieldLabel"
+                    android:text="@string/label_content" />
+
+                <EditText
+                    android:id="@+id/etContent"
+                    style="@style/Field"
+                    android:layout_marginBottom="0dp"
+                    android:gravity="top|start"
+                    android:hint="@string/hint_content"
+                    android:inputType="textMultiLine|textCapSentences"
+                    android:lineSpacingExtra="3dp"
+                    android:minLines="6" />
+            </LinearLayout>
+
+            <!-- Görseller -->
+            <LinearLayout style="@style/SectionCard">
+
+                <TextView
+                    style="@style/SectionTitle"
+                    android:drawableStart="@drawable/ic_image"
+                    android:drawableTint="@color/blue"
+                    android:text="@string/section_images" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/btnGallery"
+                        style="@style/OutlineButton"
+                        android:layout_marginEnd="10dp"
+                        android:drawableStart="@drawable/ic_image"
+                        android:drawableTint="@color/blue"
+                        android:text="@string/from_gallery" />
+
+                    <TextView
+                        android:id="@+id/btnCamera"
+                        style="@style/OutlineButton"
+                        android:drawableStart="@drawable/ic_camera"
+                        android:drawableTint="@color/blue"
+                        android:text="@string/from_camera" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvNoImages"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/no_images"
+                    android:textColor="@color/text_light"
+                    android:textSize="13sp" />
+
+                <HorizontalScrollView
+                    android:id="@+id/imagesScroll"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:scrollbars="none"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:id="@+id/imagesContainer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" />
+                </HorizontalScrollView>
+            </LinearLayout>
+
+            <!-- Grafik -->
+            <LinearLayout style="@style/SectionCard">
+
+                <TextView
+                    style="@style/SectionTitle"
+                    android:drawableStart="@drawable/ic_chart"
+                    android:drawableTint="@color/blue"
+                    android:text="@string/section_chart" />
+
+                <TextView
+                    android:id="@+id/btnAddChart"
+                    style="@style/OutlineButton"
+                    android:layout_width="match_parent"
+                    android:layout_weight="0"
+                    android:text="@string/add_chart" />
+
+                <LinearLayout
+                    android:id="@+id/chartEditor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <EditText
+                        android:id="@+id/etChartTitle"
+                        style="@style/Field"
+                        android:hint="@string/hint_chart_title"
+                        android:inputType="textCapSentences"
+                        android:maxLines="1" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/typeBar"
+                            style="@style/Pill"
+                            android:text="@string/chart_bar" />
+
+                        <TextView
+                            android:id="@+id/typeLine"
+                            style="@style/Pill"
+                            android:text="@string/chart_line" />
+
+                        <TextView
+                            android:id="@+id/typePie"
+                            style="@style/Pill"
+                            android:text="@string/chart_pie" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/rowsContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
+
+                    <TextView
+                        android:id="@+id/btnAddRow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:background="@drawable/bg_ripple_blue_round"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center_vertical"
+                        android:paddingEnd="12dp"
+                        android:text="@string/add_row"
+                        android:textColor="@color/blue"
+                        android:textSize="14sp" />
+
+                    <com.studycard.app.ChartView
+                        android:id="@+id/chartPreview"
+                        android:layout_width="match_parent"
+                        android:layout_height="220dp"
+                        android:layout_marginTop="8dp" />
+
+                    <TextView
+                        android:id="@+id/btnRemoveChart"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_gravity="end"
+                        android:layout_marginTop="4dp"
+                        android:background="@drawable/bg_ripple_blue_round"
+                        android:gravity="center_vertical"
+                        android:paddingStart="12dp"
+                        android:text="@string/remove_chart"
+                        android:textColor="@color/text_mid"
+                        android:textSize="13sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Tekrar hatırlatıcısı -->
+            <LinearLayout style="@style/SectionCard">
+
+                <TextView
+                    style="@style/SectionTitle"
+                    android:drawableStart="@drawable/ic_bell"
+                    android:drawableTint="@color/blue"
+                    android:text="@string/section_review" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_tag"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="14dp">
+
+                    <ImageView
+                        android:layout_width="26dp"
+                        android:layout_height="26dp"
+                        android:src="@drawable/ic_alarm"
+                        android:tint="@color/blue" />
+
+                    <TextView
+                        android:id="@+id/tvReview"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_weight="1"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="@string/no_review"
+                        android:textColor="@color/blue_deep"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:id="@+id/quickContainer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" />
+                </HorizontalScrollView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/btnPickDate"
+                        style="@style/OutlineButton"
+                        android:layout_marginEnd="10dp"
+                        android:drawableStart="@drawable/ic_calendar"
+                        android:drawableTint="@color/blue"
+                        android:text="@string/pick_date" />
+
+                    <TextView
+                        android:id="@+id/btnPickTime"
+                        style="@style/OutlineButton"
+                        android:drawableStart="@drawable/ic_alarm"
+                        android:drawableTint="@color/blue"
+                        android:text="@string/pick_time" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/btnClearReview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_gravity="end"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/bg_ripple_blue_round"
+                    android:gravity="center_vertical"
+                    android:paddingStart="12dp"
+                    android:text="@string/remove_review"
+                    android:textColor="@color/text_mid"
+                    android:textSize="13sp"
+                    android:visibility="gone" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

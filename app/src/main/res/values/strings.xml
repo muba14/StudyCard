@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">StudyCard</string>
+    <string name="channel_name">Tekrar hatırlatıcıları</string>
+    <string name="channel_desc">Ders notlarını tekrar etme zamanı geldiğinde bildirim gönderir</string>
+
+    <string name="search_hint">Not veya ders ara…</string>
+    <string name="tab_today">Bugün</string>
+    <string name="tab_upcoming">Yaklaşan</string>
+    <string name="tab_all">Tümü</string>
+    <string name="exact_banner">Bildirimlerin tam zamanında gelmesi için izin ver  ›</string>
+    <string name="empty_title">Burada henüz not yok</string>
+    <string name="empty_text">Sağ alttaki + ile ilk ders notunu ekle, tekrar gününü seç; zamanı gelince sana hatırlatayım.</string>
+    <string name="empty_today_title">Bugün tekrar yok</string>
+    <string name="empty_today_text">Bugün için planlanmış tekrarın kalmadı. Yaklaşan sekmesinden sıradakilere bakabilirsin.</string>
+
+    <string name="new_note">Yeni Not</string>
+    <string name="edit_note">Notu Düzenle</string>
+    <string name="save">Kaydet</string>
+    <string name="section_info">Not bilgileri</string>
+    <string name="label_subject">Ders</string>
+    <string name="hint_subject">Örn. Matematik, C Programlama</string>
+    <string name="label_title">Başlık</string>
+    <string name="hint_title">Örn. Türev kuralları</string>
+    <string name="label_content">Not</string>
+    <string name="hint_content">Ders notunu buraya yaz…</string>
+    <string name="section_images">Görseller</string>
+    <string name="from_gallery">Galeri</string>
+    <string name="from_camera">Kamera</string>
+    <string name="no_images">Henüz görsel eklenmedi. Tahta fotoğrafı, defter sayfası veya ekran görüntüsü ekleyebilirsin.</string>
+    <string name="section_chart">Grafik</string>
+    <string name="add_chart">+ Grafik ekle</string>
+    <string name="remove_chart">Grafiği kaldır</string>
+    <string name="hint_chart_title">Grafik başlığı (isteğe bağlı)</string>
+    <string name="chart_bar">Çubuk</string>
+    <string name="chart_line">Çizgi</string>
+    <string name="chart_pie">Pasta</string>
+    <string name="add_row">+ Satır ekle</string>
+    <string name="hint_label">Etiket</string>
+    <string name="hint_value">Değer</string>
+    <string name="section_review">Tekrar hatırlatıcısı</string>
+    <string name="no_review">Tarih seçilmedi</string>
+    <string name="pick_date">Tarih seç</string>
+    <string name="pick_time">Saat seç</string>
+    <string name="remove_review">Hatırlatıcıyı kaldır</string>
+
+    <string name="note">Not</string>
+    <string name="next_review">Sonraki tekrar</string>
+    <string name="section_notes">Notlar</string>
+    <string name="reviewed">✓  Tekrar ettim</string>
+    <string name="delete_title">Not silinsin mi?</string>
+    <string name="delete_msg">Bu not, görselleri ve hatırlatıcısı kalıcı olarak silinecek.</string>
+    <string name="delete">Sil</string>
+    <string name="cancel">Vazgeç</string>
+    <string name="discard_title">Değişiklikler kaydedilmedi</string>
+    <string name="discard_msg">Çıkarsan yaptığın değişiklikler kaybolacak.</string>
+    <string name="discard">Çık</string>
+    <string name="keep_editing">Düzenlemeye devam et</string>
+    <string name="snooze">Yarın hatırlat</string>
+    <string name="open">Notu aç</string>
+</resources>
